@@ -58,11 +58,6 @@
       "url": "api-reference"
     },
     {
-      "name": "Политики",
-      "icon": "shield-halved",
-      "url": "privacy"
-    },
-    {
       "name": "support@gptbots.chat",
       "icon": "comment-question",
       "url": "mailto:support@gptbots.chat"
