@@ -71,7 +71,10 @@
   "navigation": [
     {
       "group": "Обзор",
-      "pages": ["introduction", "platform"]
+      "pages": [
+        "introduction",
+        "platform"
+      ]
     },
     {
       "group": "LLM модели",
@@ -113,18 +116,24 @@
     },
     {
       "group": "Хранилище данных",
-      "pages": ["datastore/get-started"]
+      "pages": [
+        "datastore/get-started"
+      ]
     },
     {
       "group": "Формы",
-      "pages": ["form/get-started"]
+      "pages": [
+        "form/get-started"
+      ]
     },
     {
       "group": "Интеграции",
       "pages": [
         {
           "group": "🧠 Обучение",
-          "pages": ["integrations/google-drive"]
+          "pages": [
+            "integrations/google-drive"
+          ]
         },
         {
           "group": "🚀 Установка",
@@ -137,9 +146,10 @@
     },
     {
       "group": "API",
-      "pages": ["api-reference/authentication"]
+      "pages": [
+        "api-reference/authentication"
+      ]
     },
-
     {
       "group": "Виджеты",
       "pages": [
@@ -182,15 +192,6 @@
         "api-reference/endpoint/datastores/upsert",
         "api-reference/endpoint/datasources/update",
         "api-reference/endpoint/datastores/file-upload"
-      ]
-    },
-    {
-      "group": "Политики",
-      "pages": [
-        "privacy/gdpr",
-        "privacy/cookie-policy",
-        "privacy/privacy-policy",
-        "privacy/terms"
       ]
     }
   ],
