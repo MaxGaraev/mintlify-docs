@@ -1,0 +1,73 @@
+---
+title: 'Хранилище данных - Upsert (⚠️ устарело)'
+api: 'POST https://gptbots.chat/api/datastores/upsert/{datastoreId}'
+description: 'Эта конечная точка позволяет вам добавить новый источник данных в хранилище данных.'
+authMethod: 'bearer'
+---
+
+### Path
+
+<ParamField path="datastoreId" type="string" required>
+  Идентификатор хранилища данных, к которому вы хотите получить доступ.
+</ParamField>
+
+### Body
+
+<ParamField path="documents" type="array" required>
+  
+<Expandable title="Toggle object" defaultOpen>
+
+Документы, которые вы хотите обновить.
+
+<ParamField body="text" type="string" required>
+  Это имя источника данных.
+</ParamField>
+
+<ParamField body="name" type="string">
+  Это имя источника данных.
+</ParamField>
+
+<ParamField body="metadata" type="JSON or null">
+  Это объект метаданных источника данных.
+</ParamField>
+
+</Expandable>
+
+</ParamField>
+
+### Response
+
+<ResponseField name="ids" type="array of string">
+  Идентификаторы созданных документов.
+</ResponseField>
+
+<RequestExample>
+
+```bash Example Request
+curl --location --request POST 'https://gptbots.chat/api/datastores/upsert/<datastoreId>' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <API_KEY>' \
+--data-raw '{
+    "documents": [
+      "text": "Lorem Ipsum...",
+      "name": "My Document",
+      "metadata": {
+        "source" : "https://en.wikipedia.org/wiki/Lorem_ipsum",
+        "author": "John Doe",
+        "date": "2021-01-01",
+      }
+    ]
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "ids": ["60f9b9f0-0b1a-11ec-9a03-0242ac130003"]
+}
+```
+
+</ResponseExample>

@@ -1,0 +1,26 @@
+---
+title: Стандартный виджет
+description: 'Встройте форму Gptbots с помощью виджета «Стандартный».'
+---
+
+Чтобы установить форму на свой сайт с помощью виджета «Стандартный», используйте следующий фрагмент кода:
+
+```html
+<script type="module">
+  import Form from 'https://cdn.jsdelivr.net/npm/@gptbotschat/embeds@latest/dist/form/index.js';
+
+  Form.initStandard({
+    formId: 'YOUR_FORM_ID',
+  });
+</script>
+
+<gptbots-form-standard />
+```
+
+Замените `YOUR_FORM_ID` на ID вашей Формы
+
+<Note>
+  Идентификатор формы можно найти в настройках формы на вкладке «Настройки».
+</Note>
+
+См. все доступные атрибуты в [Справочнике по форме](/widgets/form/reference).

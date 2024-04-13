@@ -1,0 +1,707 @@
+openapi: 3.0.1
+info:
+  title: Gptbots.chat - API OpenAPI спецификация
+  description: |-
+
+  termsOfService: http://gptbots.chat/terms
+  contact:
+    email: support@gptbots.chat
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: https://gptbots.chat
+tags:
+  - name: агент
+  - name: хранилище данных
+  - name: источник данных
+paths:
+  /datasources:
+    post:
+      tags:
+        - источники данных
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                fileName:
+                  type: string
+                type:
+                  enum:
+                    - file
+                datastoreId:
+                  type: string
+                custom_id:
+                  type: string
+                  description: Полезно для многопользовательских настроек
+
+              required:
+                - type
+                - datastoreId
+                - file
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  enum: ['web_page', 'web_site']
+                datastoreId:
+                  type: string
+                custom_id:
+                  type: string
+                  description: Полезно для многопользовательских настроек
+                config:
+                  type: object
+                  properties:
+                    source_url:
+                      type: string
+                      format: url
+                      description: web_page, web_site
+                    sitemap:
+                      type: string
+                      format: url
+                      description: web_site
+
+              # oneOf:
+              #   - $ref: '#/components/schemas/DatasourceWebPage'
+              #   - $ref: '#/components/schemas/DatasourceWebSite'
+              # discriminator:
+              #   propertyName: type
+              #   mappping:
+              #     "web_page": '#/components/schemas/y'
+              #     "web_site": '#/components/schemas/DatasourceWebSite'
+
+              required:
+                - type
+                - datastoreId
+                - config
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Datasource'
+        '400':
+          description: Invalid body
+        '403':
+          description: Unauthorized
+  /datasources/{id}:
+    get:
+      tags:
+        - источники данных
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            description: Идентификатор источника данных
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Datasource'
+        '403':
+          description: Unauthorized
+    delete:
+      tags:
+        - источники данных
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            description: Идентификатор источника данных
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Datasource'
+        '403':
+          description: Unauthorized
+  /agents/{id}/query:
+    post:
+      tags:
+        - агенты
+      summary: Это позволит вам запросить у вашего агента конкретный запрос.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            description: Идентификатор агента
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: Вопрос, который вы хотите задать своему агенту.
+                conversationId:
+                  type: string
+                  description: Идентификатор беседы (если не указано, создается новая беседа)
+                visitorId:
+                  type: string
+                  description: Идентификатор участника, отправляющего запрос (если не указан, создается новый идентификатор)
+                temperature:
+                  type: number
+                  description: Температура модели (мин 0,0, макс 1,0)
+                streaming:
+                  type: boolean
+                  description: Включить потоковую передачу
+                modelName:
+                  description: Переопределить модель агента
+                  enum:
+                    - gpt_3_5_turbo
+                    - gpt_3_5_turbo_16k
+                    - gpt_4
+                maxTokens:
+                  type: number
+                  description: Максимальное количество токенов, которые можно сгенерировать при завершении чата.
+                presencePenalty:
+                  type: number
+                  description: Число между -2.0 и 2.0. Положительные значения штрафуют новые токены на основе их появления в тексте до этого, увеличивая вероятность модели говорить о новых темах.
+                frequencyPenalty:
+                  type: number
+                  description: Число между -2.0 и 2.0. Положительные значения штрафуют новые токены на основе их текущей частоты в тексте до этого, уменьшая вероятность модели повторять ту же самую строку дословно.
+                topP:
+                  type: number
+                  description: Альтернатива выборки с температурой - это выборка ядра (nucleus sampling), где модель рассматривает результаты токенов с вероятностью top_p. Таким образом, значение 0.1 означает, что рассматриваются только токены, составляющие верхние 10% вероятностной массы. Обычно мы рекомендуем изменять это значение или температуру, но не оба сразу.
+                filters:
+                  type: object
+                  properties:
+                    custom_ids:
+                      type: array
+                      description: Фильтр по пользовательским ID
+                      items:
+                        type: string
+                    datasource_ids:
+                      type: array
+                      description: Фильтр по ID источника данных
+                      items:
+                        type: string
+                systemPrompt:
+                  description: Системный ПРОМТ для агента
+                  type: string
+
+                userPrompt:
+                  description: Пользовательский ПРОМТ для агента
+                  type: string
+                promptType:
+                  deprecated: true
+                  description: (УСТАРЕЛО в пользу systemPrompt и userPrompt) Установите тип запроса для этого запроса
+                  enum:
+                    - raw
+                    - customer_support
+                promptTemplate:
+                  deprecated: true
+                  type: string
+                  description: (УСТАРЕЛО в пользу systemPrompt и userPrompt) Установите шаблон запроса для этого запроса
+              required:
+                - query
+
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  answer:
+                    type: string
+                    description: Ответ агента.
+                  conversationId:
+                    type: string
+                    description: ID беседы
+                  visitorId:
+                    type: string
+                    description: ID участника, отправляющего запрос
+                  sources:
+                    type: array
+                    items:
+                      type: object
+                      description: Фрагменты источника данных, которые были использованы для генерации ответа
+        '400':
+          description: Invalid body
+        '403':
+          description: Unauthorized
+  /agents:
+    post:
+      tags:
+        - агенты
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                modelName:
+                  enum:
+                    - gpt_3_5_turbo
+                    - gpt_3_5_turbo_16k
+                    - gpt_4
+                    - gpt_4_32k
+                temperature:
+                  type: number
+                  description: Температура модели (минимум 0.0, максимум 1.0)
+                systemPrompt:
+                  description: Системный ПРОМТ для агента
+                  type: string
+
+                userPrompt:
+                  description: Пользовательский ПРОМТ для агента
+                  type: string
+
+                promptType:
+                  description: (УСТАРЕЛО в пользу systemPrompt и userPrompt) Установите тип запроса для этого запроса
+                  enum:
+                    - raw
+                    - customer_support
+                promptTemplate:
+                  type: string
+                  description: (УСТАРЕЛО в пользу systemPrompt и userPrompt) Установите шаблон запроса для этого запроса
+                visibility:
+                  enum:
+                    - public
+                    - private
+              required:
+                - description
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent'
+        '400':
+          description: Invalid body
+        '403':
+          description: Unauthorized
+  /agents/{id}:
+    get:
+      tags:
+        - agents
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            description: ID агента
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent'
+        '403':
+          description: Unauthorized
+    patch:
+      tags:
+        - agents
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                modelName:
+                  enum:
+                    - gpt_3_5_turbo
+                    - gpt_3_5_turbo_16k
+                    - gpt_4
+                    - gpt_4_32k
+                temperature:
+                  type: number
+                  description: Температура модели (минимум 0.0, максимум 1.0)
+
+                systemPrompt:
+                  description: Системный ПРОМТ для агента
+                  type: string
+
+                userPrompt:
+                  description: Пользовательский ПРОМТ для агента
+                  type: string
+
+                promptType:
+                  description: (УСТАРЕЛО в пользу systemPrompt и userPrompt) Установите тип запроса для этого запроса
+                  enum:
+                    - raw
+                    - customer_support
+                promptTemplate:
+                  type: string
+                  description: (УСТАРЕЛО в пользу systemPrompt и userPrompt) Установите шаблон запроса для этого запроса
+                visibility:
+                  enum:
+                    - public
+                    - private
+              required:
+                - description
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent'
+        '400':
+          description: Invalid body
+        '403':
+          description: Unauthorized
+    delete:
+      tags:
+        - agents
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            description: ID агента
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent'
+        '403':
+          description: Unauthorized
+  /datastores:
+    post:
+      tags:
+        - datastores
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                type:
+                  enum:
+                    - qdrant
+                # visibility:
+                #   enum:
+                #     - public
+                #     - private
+              required:
+                - description
+                - type
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Datastore'
+        '400':
+          description: Invalid body
+        '403':
+          description: Unauthorized
+  /datastores/{id}:
+    get:
+      tags:
+        - datastores
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            description: ID агента
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Datastore'
+        '403':
+          description: Unauthorized
+    patch:
+      tags:
+        - datastores
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                type:
+                  enum:
+                    - qdrant
+                # visibility:
+                #   enum:
+                #     - public
+                #     - private
+              required:
+                - description
+                - type
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Datastore'
+        '400':
+          description: Invalid body
+        '403':
+          description: Unauthorized
+    delete:
+      tags:
+        - datastores
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            description: ID агента
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Datastore'
+        '403':
+          description: Unauthorized
+  /datastores/{id}/query:
+    post:
+      tags:
+        - хранилище данных
+      summary: Эта конечная точка получает наиболее похожие фрагменты документов для данного запроса.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            description: ID хранилища данных
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: Задайте свой вопрос агенту.
+                topK:
+                  type: number
+                  description: Максимальное количество результатов для извлечения.
+                filters:
+                  type: object
+                  properties:
+                    custom_ids:
+                      type: array
+                      description: Фильтр по пользовательским ID
+                      items:
+                        type: string
+                    datasource_ids:
+                      type: array
+                      description: Фильтр по ID источника данных
+                      items:
+                        type: string
+
+              required:
+                - query
+
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    text:
+                      type: string
+                      description: Текст фрагмента документа
+                    score:
+                      type: number
+                      description: Оценка сходства фрагмента документа
+                    source:
+                      type: string
+                      description: URL источника фрагмента документа
+                    datasource_id:
+                      type: string
+                      description: ID источника данных, к которому принадлежит фрагмент документа
+                    datasource_name:
+                      type: string
+                      description: Название источника данных, к которому принадлежит фрагмент документа
+        '400':
+          description: Invalid body
+        '403':
+          description: Unauthorized
+components:
+  schemas:
+    Datasource:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        name:
+          type: string
+        status:
+          enum:
+            [unsynched, pending, running, synched, error, usage_limit_reached]
+        groupId:
+          type: string
+        updatedAt:
+          type: string
+          format: date
+        createdAt:
+          type: string
+          format: date
+        lastSynch:
+          type: string
+          format: date
+        config:
+          type: object
+    Agent:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        modelName:
+          enum:
+            - gpt_3_5_turbo
+            - gpt_3_5_turbo_16k
+            - gpt_4
+            - gpt_4_32k
+        temperature:
+          type: number
+          description: Температура модели (минимум 0.0, максимум 1.0)
+        visibility:
+          enum:
+            - public
+            - private
+        systemPrompt:
+          description: Системный ПРОМТ для агента
+          type: string
+
+        userPrompt:
+          description: Пользовательский ПРОМТ для агента
+          type: string
+
+        promptType:
+          deprecated: true
+          description: (УСТАРЕЛО в пользу systemPrompt и userPrompt) Установите тип запроса для этого запроса
+          enum:
+            - raw
+            - customer_support
+        promptTemplate:
+          deprecated: true
+          type: string
+          description: (УСТАРЕЛО в пользу systemPrompt и userPrompt) Установите шаблон запроса для этого запроса
+
+    Datastore:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        type:
+          enum:
+            - qdrant
+        visibility:
+          enum:
+            - public
+            - private
+    DatasourceConfigWebPage:
+      type: object
+      properties:
+        source_url:
+          type: string
+          format: url
+    DatasourceConfigWebSite:
+      type: object
+      properties:
+        source_url:
+          type: string
+          format: url
+        sitemap:
+          type: string
+          format: url
+  securitySchemes:
+    bearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+
+security:
+  - bearerAuth: []

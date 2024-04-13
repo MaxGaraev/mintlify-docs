@@ -1,0 +1,58 @@
+---
+title: 'Агент - Query'
+openapi: 'POST /agents/{id}/query'
+---
+
+### Потоковая передача
+
+##### Когда потоковая передача включена, конечная точка будет генерировать события «ответ» (ответ модели) и «endpoint_response» (полный ответ конечной точки).
+
+```js
+import {
+  EventStreamContentType,
+  fetchEventSource,
+} from '@microsoft/fetch-event-source';
+
+let buffer = '';
+let bufferEndpointResponse = '';
+const ctrl = new AbortController();
+
+await fetchEventSource(queryAgentURL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        signal: ctrl.signal,
+        body: JSON.stringify({
+          streaming: true,
+          query,
+          conversationId,
+          visitorId,
+        }),
+
+        async onopen(response) {
+          if (response.status === 402) {
+            throw new ApiError(ApiErrorType.USAGE_LIMIT);
+          }
+        },
+        onmessage: (event) => {
+          if (event.data === '[DONE]') {
+            // End of stream
+            ctrl.abort();
+
+            try {
+              const { sources, conversationId, visitorId } = JSON.parse(
+                bufferEndpointResponse
+              ) as ChatResponse;
+            } catch {}
+          } else if (event.data?.startsWith('[ERROR]')) {
+            // ...
+          } else if (event.event === "endpoint_response") {
+            bufferEndpointResponse += event.data;
+          } else if (event.event === "answer") {
+            buffer += event.data;
+            // ...
+          }
+       },
+  });
+```

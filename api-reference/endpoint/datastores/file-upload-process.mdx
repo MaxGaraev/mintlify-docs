@@ -1,0 +1,47 @@
+---
+title: 'Хранилище данных - File Upload - Process'
+api: 'POST https://gptbots.chat/api/datastores/file-upload/{datastoreId}'
+description: 'Эта конечная точка позволяет завершить процесс загрузки файла.'
+authMethod: 'bearer'
+---
+
+### Path
+
+<ParamField path="datastoreId" type="string" required>
+  Идентификатор хранилища данных, в которое вы хотите загрузить файл.
+</ParamField>
+
+### Body
+
+<ParamField body="id" type="string" required>
+  Идентификатор ссылки для загрузки, созданной с помощью /datastores/file-upload/generate-link/`<datastoreId>`
+</ParamField>
+
+### Response
+
+<ResponseField name="id" type="string">
+  Идентификатор ссылки для загрузки.
+</ResponseField>
+
+<RequestExample>
+
+```bash Example Request
+curl --location --request POST 'https://gptbots.chat/api/datastores/file-upload/<datastoreId>' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <API_KEY>' \
+--data-raw '{
+    "id": "clgur3oas000008l6emz0bbal"
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "id": "clgur3oas000008l6emz0bbal"
+}
+```
+
+</ResponseExample>

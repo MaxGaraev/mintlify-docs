@@ -1,0 +1,91 @@
+---
+title: 'Хранилище данных - File Upload (⚠️ устарело)'
+api: 'POST http://localhost:3000/api/external/datastores/file-upload/{datastoreId}'
+description: 'Эта конечная точка позволяет загрузить новый файл в хранилище данных.'
+authMethod: 'bearer'
+---
+
+### Path
+
+<ParamField path="datastoreId" type="string" required>
+  Идентификатор хранилища данных, в которое вы хотите загрузить файл.
+</ParamField>
+
+<ParamField
+  header="content-type"
+  type="string"
+  required
+  default="multipart/form-data"
+>
+  Content Type должен быть установлен на multipart/form-data
+</ParamField>
+
+### Body
+
+<ParamField body="file" type="file" required>
+  Загрузка файла
+</ParamField>
+
+<ParamField body="fileName" type="string">
+  Имя файла
+</ParamField>
+
+<ParamField body="custom_id" type="string">
+  Пользовательский идентификатор: Если вы хотите установить собственный идентификатор для файла, вы можете сделать это здесь.
+</ParamField>
+
+##### Поддерживаемые mime типы
+
+- text/csv'
+- text/plain'
+- text/markdown'
+- application/pdf'
+- application/json'
+- application/vnd.openxmlformats-officedocument.presentationml.presentation
+- application/vnd.openxmlformats-officedocument.wordprocessingml.document
+- application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+
+### Пример JS кода
+
+```js
+const apiUrl = 'https://gptbots.chat/api';
+const apiKey = 'XXX';
+const datastoreId = 'XXX';
+
+const fileName = 'test.pdf';
+const buffer = fs.readFileSync(fileName);
+
+const formData = new FormData();
+
+formData.append(
+  'file',
+  new Blob([buffer], {
+    type: 'application/pdf',
+  }),
+  fileName
+);
+
+formData.append('fileName', fileName);
+
+// Request upload link
+const res = await fetch(
+  `${apiUrl}/api/external/datastores/file-upload/${datastoreId}`,
+  {
+    method: 'POST',
+    body: formData,
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+    },
+  }
+);
+```
+
+<RequestExample>
+
+```bash Example Request
+curl --location --request POST 'https://gptbots.chat/api/external/datastores/file-upload/<datastoreId>' \
+--header 'Authorization: Bearer <API_KEY>' \
+--form 'file=@"/Users/path/test.pdf"'
+```
+
+</RequestExample>

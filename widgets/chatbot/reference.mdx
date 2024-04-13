@@ -1,0 +1,135 @@
+---
+title: 'Справочник чата для сайта'
+description: 'Справочник'
+---
+
+import ToDoDoc from '/snippets/to-do-doc.mdx';
+
+Чат-бот доступен через нашу CDN в виде одного файла JavaScript или через NPM в виде пакета компонентов React.
+
+<Tabs>
+  <Tab title="HTML" >
+    ```html
+    <script type="module">
+    import Chatbox from 'https://cdn.jsdelivr.net/npm/@gptbotschat/embeds@latest/dist/chatbox/index.js';
+
+    Chatbox.initBubble({
+    agentId: 'YOUR_AGENT_ID',
+    });
+
+    </script>
+
+`````
+  </Tab>
+  <Tab title="React" >
+    <ToDoDoc />
+  </Tab>
+</Tabs>
+
+## Attributes / Props
+
+<Tabs>
+  <Tab title="HTML" >
+    ```html
+    <script type="module">
+  import Chatbox from 'https://cdn.jsdelivr.net/npm/@gptbotschat/embeds@latest/dist/chatbox/index.js';
+
+Chatbox.initBubble({
+agentId: 'YOUR_AGENT_ID',
+
+    // Если указано, будет создан контакт для пользователя и свяжется с ним в беседе.
+    contact: {
+    firstName: 'Иван',
+    lastName: 'Иванов',
+    email: 'ivan@email.com',
+    phoneNumber: '+79161187386',
+    userId: '42424242',
+    },
+    // Переопределить начальные сообщения
+    initialMessages: [
+    'Привет, чем сегодня займемся?',
+    'Как я могу к тебе обращаться?',
+    ],
+    // Предоставленный контекст будет добавлен к системному промту агента.
+    context: "Пользователь, с которым вы разговариваете, — Иван. Начни с приветствия по имени.",
+
+});
+
+</script>
+    ```
+  </Tab>
+  <Tab title="React" >
+    <ToDoDoc />
+  </Tab>
+</Tabs>
+
+<ParamField path="agentId" type="string" required>
+  ID агента
+</ParamField>
+<ParamField path="contact" type="string">
+  <Expandable title="properties">
+    <ResponseField name="firstName" type="string">
+    Имя
+    </ResponseField>
+
+    <ResponseField name="lastName" type="string">
+      Фамилия
+    </ResponseField>
+    <ResponseField name="email" type="string">
+      Электронная почта
+    </ResponseField>
+    <ResponseField name="phoneNumber" type="string">
+      Телефон
+    </ResponseField>
+    <ResponseField name="userId" type="string">
+      ID пользователя
+    </ResponseField>
+
+  </Expandable>
+</ParamField>
+
+<ParamField path="initialMessages" type="string array">
+  Начальное сообщение Агента
+</ParamField>
+
+<ParamField path="context" type="string">
+  Дополнительный контекст, который будет добавлен к системному промту Агента.
+</ParamField>
+
+## Методы
+
+<ParamField path="open" type="bubble widget only">
+Открыть чат для сайта
+```js
+const widget = await Chatbox.initBubble({
+  agentId: 'YOUR_AGENT_ID',
+})
+
+widget.open()
+
+````
+</ParamField>
+
+<ParamField path="close"   type="bubble widget only">
+  Закрыть чат для сайта
+  ```js
+  const widget = await Chatbox.initBubble({
+    agentId: 'YOUR_AGENT_ID',
+  })
+
+  widget.close()
+```
+
+</ParamField>
+
+<ParamField path="toggle"  type="bubble widget only">
+
+```js Toggle Bubble Chatbox
+const widget = await Chatbox.initBubble({
+  agentId: 'YOUR_AGENT_ID',
+})
+
+widget.toggle()
+```
+</ParamField>
+`````

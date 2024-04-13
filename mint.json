@@ -1,91 +1,207 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Starter Kit",
+  "name": "gptbots.chat",
   "logo": {
-    "dark": "/logo/dark.svg",
-    "light": "/logo/light.svg"
+    "dark": "/logo/dark.png",
+    "light": "/logo/light.png"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/favicon.png",
   "colors": {
-    "primary": "#0D9373",
-    "light": "#07C983",
-    "dark": "#0D9373",
-    "anchors": {
-      "from": "#0D9373",
-      "to": "#07C983"
-    }
+    "primary": "#6132A9",
+    "light": "#C69EFF",
+    "dark": "#6132A9"
   },
   "topbarLinks": [
     {
-      "name": "Support",
-      "url": "mailto:hi@mintlify.com"
+      "name": "Github",
+      "url": "https://github.com/MaxGaraev/gptbots"
     }
   ],
   "topbarCtaButton": {
-    "name": "Dashboard",
-    "url": "https://dashboard.mintlify.com"
+    "name": "Попробовать бесплатно",
+    "url": "https://gptbots.chat/signin"
   },
-  "tabs": [
-    {
-      "name": "API Reference",
-      "url": "api-reference"
-    }
-  ],
   "anchors": [
     {
-      "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
+      "name": "Модели",
+      "icon": "brain",
+      "url": "models"
     },
     {
-      "name": "Community",
-      "icon": "slack",
-      "url": "https://mintlify.com/community"
+      "name": "Агенты",
+      "icon": "hat-wizard",
+      "url": "agent"
     },
     {
-      "name": "Blog",
-      "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
+      "name": "Хранилища данных",
+      "icon": "data",
+      "url": "datastore"
+    },
+    {
+      "name": "Формы",
+      "icon": "table-list",
+      "url": "form"
+    },
+    {
+      "name": "Интеграции",
+      "icon": "puzzle-piece",
+      "url": "integrations"
+    },
+    {
+      "name": "Виджеты",
+      "icon": "html5",
+      "url": "widgets"
+    },
+    {
+      "name": "API",
+      "icon": "rectangle-terminal",
+      "url": "api-reference"
+    },
+    {
+      "name": "Политики",
+      "icon": "shield-halved",
+      "url": "privacy"
+    },
+    {
+      "name": "support@gptbots.chat",
+      "icon": "comment-question",
+      "url": "mailto:support@gptbots.chat"
     }
   ],
   "navigation": [
     {
-      "group": "Get Started",
+      "group": "Обзор",
+      "pages": ["introduction", "platform"]
+    },
+    {
+      "group": "LLM модели",
       "pages": [
-        "introduction",
-        "quickstart",
-        "development"
+        "models/mixtral-8x22b",
+        "models/gpt4-turbo",
+        "models/gpt3-5-turbo",
+        "models/dolphin-2-6-mixtral-8x7b",
+        "models/claude-3-sonnet",
+        "models/claude-3-opus",
+        "models/claude-3-haiku",
+        "models/yandex-gpt-3"
       ]
     },
     {
-      "group": "Essentials",
+      "group": "Агент",
       "pages": [
-        "essentials/markdown",
-        "essentials/code",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation",
-        "essentials/reusable-snippets"
+        "agent/get-started",
+        {
+          "group": "Инструменты",
+          "pages": [
+            "agent/tools/quick-start",
+            "agent/tools/datastore-tool",
+            "agent/tools/http-tool",
+            "agent/tools/form-tool",
+            "agent/tools/request-human-tool",
+            "agent/tools/mark-as-resolved-tool",
+            "agent/tools/lead-generation-tool"
+          ]
+        },
+        "agent/human-handoff",
+        "agent/fine-tuning",
+        "agent/answer-sources",
+        "agent/message-suggestions",
+        "agent/optimize-ai-answers",
+        "agent/rate-limit",
+        "agent/debug"
       ]
     },
     {
-      "group": "API Documentation",
+      "group": "Хранилище данных",
+      "pages": ["datastore/get-started"]
+    },
+    {
+      "group": "Формы",
+      "pages": ["form/get-started"]
+    },
+    {
+      "group": "Интеграции",
       "pages": [
-        "api-reference/introduction"
+        {
+          "group": "🧠 Обучение",
+          "pages": ["integrations/google-drive"]
+        },
+        {
+          "group": "🚀 Установка",
+          "pages": [
+            "integrations/whatsapp",
+            "integrations/telegram"
+          ]
+        }
       ]
     },
     {
-      "group": "Endpoint Examples",
+      "group": "API",
+      "pages": ["api-reference/authentication"]
+    },
+
+    {
+      "group": "Виджеты",
       "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/delete"
+        {
+          "group": "Чат боты",
+          "pages": [
+            "widgets/chatbot/bubble",
+            "widgets/chatbot/standard",
+            "widgets/chatbot/reference"
+          ]
+        },
+        {
+          "group": "Формы",
+          "pages": [
+            "widgets/form/hosted-form",
+            "widgets/form/standard",
+            "widgets/form/usage-with-chatbot",
+            "widgets/form/fields",
+            "widgets/form/reference"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Endpoints",
+      "pages": [
+        "api-reference/endpoint/agents/query",
+        "api-reference/endpoint/agents/create",
+        "api-reference/endpoint/agents/get",
+        "api-reference/endpoint/agents/update",
+        "api-reference/endpoint/agents/delete",
+        "api-reference/endpoint/datasources/create",
+        "api-reference/endpoint/datasources/get",
+        "api-reference/endpoint/datasources/delete",
+        "api-reference/endpoint/datastores/query",
+        "api-reference/endpoint/datastores/create",
+        "api-reference/endpoint/datastores/get",
+        "api-reference/endpoint/datastores/update",
+        "api-reference/endpoint/datastores/delete",
+        "api-reference/endpoint/datastores/upsert",
+        "api-reference/endpoint/datasources/update",
+        "api-reference/endpoint/datastores/file-upload"
+      ]
+    },
+    {
+      "group": "Политики",
+      "pages": [
+        "privacy/gdpr",
+        "privacy/cookie-policy",
+        "privacy/privacy-policy",
+        "privacy/terms"
       ]
     }
   ],
   "footerSocials": {
-    "twitter": "https://twitter.com/mintlify",
-    "github": "https://github.com/mintlify",
-    "linkedin": "https://www.linkedin.com/company/mintsearch"
+    "twitter": "https://twitter.com",
+    "discord": "https://discord.gg",
+    "github": "https://github.com/MaxGaraev/gptbots"
+  },
+  "feedback": {
+    "thumbsRating": false,
+    "suggestEdit": false,
+    "raiseIssue": false
   }
 }

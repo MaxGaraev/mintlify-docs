@@ -1,0 +1,72 @@
+---
+title: 'Справочник'
+description: 'Справочник'
+---
+
+import ToDoDoc from '/snippets/to-do-doc.mdx';
+
+Виджет «Форма» доступен через нашу CDN как отдельный файл JavaScript или через NPM как пакет компонента React.
+
+<Tabs>
+  <Tab title="HTML" >
+    ```html
+    <script type="module">
+  import Form from 'https://cdn.jsdelivr.net/npm/@gptbotschat/embeds@latest/dist/form/index.js';
+
+Form.initStandard({
+formId: 'YOUR_FORM_ID',
+});
+
+</script>
+
+`````
+  </Tab>
+  <Tab title="React" >
+    <ToDoDoc />
+  </Tab>
+</Tabs>
+
+## Attributes / Props
+
+<Tabs>
+  <Tab title="HTML" >
+    ```html
+    <script type="module">
+  import Form from 'https://cdn.jsdelivr.net/npm/@gptbotschat/embeds@latest/dist/form/index.js';
+
+Form.initStandard({
+  formId: 'YOUR_AGENT_ID',
+
+  onEnd: function (values) {
+    console.log('Form submitted with values:', values);
+  },
+})
+
+
+</script>
+    ```
+  </Tab>
+  <Tab title="React" >
+    <ToDoDoc />
+  </Tab>
+</Tabs>
+
+<ParamField path="formId" type="string" required>
+  ID Агента
+</ParamField>
+
+
+<ParamField path="onEnd" type="function">
+  Функция обратного вызова, которая вызывается при отправке формы. Функция получает значения формы как объект.
+```js
+const form = await Form.initBubble({
+  agentId: 'YOUR_AGENT_ID',
+  onEnd: function (values) {
+    console.log('Form submitted with values:', values);
+  },
+})
+````
+</ParamField>
+
+{/* ### Methods */}
+`````

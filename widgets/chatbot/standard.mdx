@@ -1,0 +1,26 @@
+---
+title: 'Раскрытый чат'
+description: 'Как установить на сайт'
+---
+
+Чтобы установить Агент на свой сайт с помощью виджета Раскрытый чат, используйте следующий фрагмент кода:
+
+```html
+<script type="module">
+  import Chatbox from 'https://cdn.jsdelivr.net/npm/@gptbotschat/embeds@latest/dist/chatbox/index.js';
+
+  Chatbox.initStandard({
+    agentId: 'YOUR_AGENT_ID',
+  });
+</script>
+
+<gptbots-chatbox-standard />
+```
+
+Заменитте `YOUR_AGENT_ID` на ID вашего Агента
+
+<Note>
+  Идентификатор агента можно найти в настройках агента на вкладке «Настройки».
+</Note>
+
+См. все доступные атрибуты в [Справочнике по чат-боту](/widgets/chatbot/reference).

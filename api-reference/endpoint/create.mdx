@@ -1,4 +1,78 @@
 ---
-title: 'Create Plant'
-openapi: 'POST /plants'
+title: 'Создать пользователя'
+api: 'POST https://api.mintlify.com/api/user'
+description: 'Эта конечная точка создает нового пользователя'
 ---
+
+### Body
+
+<ParamField body="current_token" type="string">
+  Это текущий токен группы пользователей, которую вы собираетесь поменять.
+</ParamField>
+
+### Response
+
+<ResponseField name="success" type="number">
+  Указывает, был ли вызов успешным. 1 в случае успеха, 0 в противном случае.
+</ResponseField>
+
+<ResponseField name="user_group" type="object">
+
+Содержимое группы пользователей
+
+<Expandable title="Toggle object">
+
+<ResponseField name="team_id" type="number">
+  Это внутренний идентификатор для этой группы пользователей. Вам не нужно записывать эту информацию, так как вам не потребуется ее использовать.
+</ResponseField>
+
+<ResponseField name="token" type="string">
+  Это токен группы пользователей (userGroupToken или USER_GROUP_TOKEN), который будет
+   используется для определения того, какая группа пользователей просматривает панель мониторинга. Вы должны сохранить
+   это с вашей стороны, чтобы использовать его при рендеринге встроенной информационной панели.
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Это имя группы пользователей, указанное в теле запроса.
+</ResponseField>
+
+<ResponseField name="provided_id" type="string">
+  Это user_group_id, указанный в теле запроса.
+</ResponseField>
+
+<ResponseField name="api_environment_tag" type="JSON or null">
+  Это тег окружения для группы пользователей. Возможные значения: 'Customer' и 'Testing'. Идентификаторы групп пользователей должны быть уникальными для каждой среды, поэтому нельзя создать несколько групп пользователей с одинаковым идентификатором. Если у вас есть производственная группа клиентов и тестовая группа пользователей с одним и тем же идентификатором, вам будет необходимо пометить одну как 'Customer' (Клиент), а другую как 'Testing' (Тестирование).
+</ResponseField>
+
+</Expandable>
+
+</ResponseField>
+
+<RequestExample>
+
+```bash Example Request
+curl --location --request POST 'https://api.mintlify.com/api/user' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Token <token>' \
+--data-raw '{
+    "current_token": ""
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": 1,
+  "user_group": {
+    "team_id": 3,
+    "token": "<user_group_token_to_auth_dashboard>",
+    "name": "Example 1",
+    "provided_id": "example_1"
+  }
+}
+```
+
+</ResponseExample>

@@ -1,0 +1,24 @@
+---
+title: 'Чат для сайта'
+description: 'Установка чата на ваш сайт'
+---
+
+Чтобы установить Агент на свой сайт с помощью виджета "Чат для сайта", используйте следующий фрагмент кода:
+
+```html
+<script type="module">
+  import Chatbox from 'https://cdn.jsdelivr.net/npm/@gptbotschat/embeds@latest/dist/chatbox/index.js';
+
+  Chatbox.initBubble({
+    agentId: 'YOUR_AGENT_ID',
+  });
+</script>
+```
+
+Замените `YOUR_AGENT_ID` на ID вашего Агента
+
+<Note>
+  Вы можете найти ID вашего Агента в настройках Агента.
+</Note>
+
+См. все доступные атрибуты в [Справочнике по чат-боту](/widgets/chatbot/reference).

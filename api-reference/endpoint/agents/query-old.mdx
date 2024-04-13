@@ -1,0 +1,140 @@
+---
+title: 'Агент - Query'
+api: 'POST https://gptbots.chat/api/agents/{agentId}/query'
+description: 'Это позволит вам запросить у вашего агента конкретный запрос.'
+authMethod: 'bearer'
+---
+
+### Path
+
+<ParamField path="agentId" type="string" required>
+  Идентификатор агента, который вы хотите запросить.
+</ParamField>
+
+### Body
+
+<ParamField body="query" type="string" required>
+  Это вопрос, который вы хотите задать своему агенту.
+</ParamField>
+
+<ParamField body="temperature" type="number" min="0.0" max="1.0">
+  Температура модели (мин 0,0, макс 1,0)
+</ParamField>
+
+<ParamField body="conversationId" type="string">
+  Идентификатор разговора
+</ParamField>
+
+<ParamField body="visitorId" type="string">
+  Идентификатор пользователя, отправляющего запрос
+</ParamField>
+
+<ParamField body="streaming" type="boolean">
+  Включить потоковую передачу
+</ParamField>
+
+<ParamField body="filters" type="Filters Object">
+  <Expandable title="properties">
+
+<ParamField body="custom_ids" type="string array">
+  Фильтровать по пользовательским идентификаторам
+</ParamField>
+
+<ParamField body="datasource_ids" type="string array">
+  Фильтровать по идентификаторам источников данных
+</ParamField>
+
+  </Expandable>
+</ParamField>
+
+### Response
+
+<ResponseField name="answer" type="string">
+  Ответ агента
+</ResponseField>
+<ResponseField name="conversationId" type="string">
+  Идентификатор разговора
+</ResponseField>
+<ResponseField name="visitorId" type="string">
+  Идентификатор пользователя, отправляющего запрос
+</ResponseField>
+<ResponseField name="sources" type="string">
+  Фрагменты источника данных, которые использовались для генерации ответа
+</ResponseField>
+
+### Потоковая передача
+
+##### Когда потоковая передача включена, конечная точка будет генерировать события «ответ» (ответ модели) и «endpoint_response» (полный ответ конечной точки).
+
+```js
+import {
+  EventStreamContentType,
+  fetchEventSource,
+} from '@microsoft/fetch-event-source';
+
+let buffer = '';
+let bufferEndpointResponse = '';
+const ctrl = new AbortController();
+
+await fetchEventSource(queryAgentURL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        signal: ctrl.signal,
+        body: JSON.stringify({
+          streaming: true,
+          query,
+          conversationId,
+          visitorId,
+        }),
+
+        async onopen(response) {
+          if (response.status === 402) {
+            throw new ApiError(ApiErrorType.USAGE_LIMIT);
+          }
+        },
+        onmessage: (event) => {
+          if (event.data === '[DONE]') {
+            // End of stream
+            ctrl.abort();
+
+            try {
+              const { sources, conversationId, visitorId } = JSON.parse(
+                bufferEndpointResponse
+              ) as ChatResponse;
+            } catch {}
+          } else if (event.data?.startsWith('[ERROR]')) {
+            // ...
+          } else if (event.event === "endpoint_response") {
+            bufferEndpointResponse += event.data;
+          } else if (event.event === "answer") {
+            buffer += event.data;
+            // ...
+          }
+       },
+  });
+```
+
+<RequestExample>
+
+```bash Example Request
+curl --location --request POST 'https://gptbots.chat/api/agents/<agentId>/query' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <API_KEY>' \
+--data-raw '{
+    "query": "Lorem Ipsum..."
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "answer": "Lorem upsum..."
+}
+```
+
+</ResponseExample>
