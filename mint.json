@@ -11,12 +11,6 @@
     "light": "#C69EFF",
     "dark": "#6132A9"
   },
-  "topbarLinks": [
-    {
-      "name": "Github",
-      "url": "https://github.com/MaxGaraev/gptbots"
-    }
-  ],
   "topbarCtaButton": {
     "name": "Попробовать бесплатно",
     "url": "https://gptbots.chat/signin"
@@ -190,11 +184,6 @@
       ]
     }
   ],
-  "footerSocials": {
-    "twitter": "https://twitter.com",
-    "discord": "https://discord.gg",
-    "github": "https://github.com/MaxGaraev/gptbots"
-  },
   "feedback": {
     "thumbsRating": false,
     "suggestEdit": false,
